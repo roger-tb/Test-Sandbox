@@ -9,7 +9,7 @@ class App extends Component {
     return (
       <Router>
         <div className="App">
-          <Styledheader>Terobot Authentication</Styledheader>
+          <Styledheader></Styledheader>
 
           <Route path="/login" component={Login} />
           <Route path="/chatbot" component={CustomChatbot} />
@@ -18,12 +18,10 @@ class App extends Component {
     );
   }
 }
-const Styledheader = styled.header`
-  border-bottom: 1px solid #777;
-  position: sticky;
-  top: 0;
-  zindex: 9000;
+const Styledheader = styled.nav`
+
   height: 62px;
-  maxheight: 62px;
+  width:100%;
+  background: url(assets/terobots.jpg) no-repeat center; 
 `;
 export default App;
