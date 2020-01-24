@@ -1,5 +1,11 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Link, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Redirect,
+  Switch,
+  Link,
+  Route
+} from "react-router-dom";
 import "./App.css";
 import Login from "./pages/login/index";
 import styled from "styled-components";
@@ -10,9 +16,11 @@ class App extends Component {
       <Router>
         <div className="App">
           <Styledheader>{/* <img src="assets/terobots.jpg" /> */}</Styledheader>
-
-          <Route path="/login" component={Login} />
-          <Route path="/chatbot" component={CustomChatbot} />
+          <Switch>
+            <Route path="/login" exact component={Login} />
+            <Route path="/chatbot" exact component={CustomChatbot} />
+            <Route component={Login} />
+          </Switch>
         </div>
       </Router>
     );
