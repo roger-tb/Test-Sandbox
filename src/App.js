@@ -9,7 +9,7 @@ class App extends Component {
     return (
       <Router>
         <div className="App">
-          <Styledheader></Styledheader>
+          <Styledheader>{/* <img src="assets/terobots.jpg" /> */}</Styledheader>
 
           <Route path="/login" component={Login} />
           <Route path="/chatbot" component={CustomChatbot} />
@@ -19,9 +19,10 @@ class App extends Component {
   }
 }
 const Styledheader = styled.nav`
-
   height: 62px;
-  width:100%;
-  background: url(assets/terobots.jpg) no-repeat center; 
+  width: 100%;
+  display: flex;
+  align-content: center;
+  /* background: url(assets/terobots.jpg) no-repeat center;  */
 `;
 export default App;
