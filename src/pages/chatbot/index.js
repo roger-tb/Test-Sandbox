@@ -2,7 +2,7 @@ import React from "react";
 import ChatBot from "react-simple-chatbot";
 import { ThemeProvider } from "styled-components";
 import { connect } from 'react-redux';
-
+import axios from "axios";
 
 class CustomChatbot extends React.Component {
   constructor(props) {
@@ -11,11 +11,33 @@ class CustomChatbot extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-  
+    // console.log(this.props.access_token);
+    this.getBotList();
+ 
 }
  
+getBotList(){
+  const AuthStr = 'Bearer '.concat(this.props.access_token); 
+  const headers = {
+    'Content-Type': 'application/json',
+    'Authorization': AuthStr, 
+    'X-UIPATH-TenantName': 'AnuragDefaup29d298910',
+  
+  };
+  console.log(headers)
+  const URL= 'https://platform.uipath.com/anuraplyzyiv/AnuragDefaup29d298910/odata/Robots';
+  axios.get(URL, { headers: headers })
+   .then(response => {
+       // If request is good...
+       console.log(response);
+    })
+   .catch((error) => {
+       console.log('error ' + error);
+    });
+
+}
   render() {
-    console.log(this.props.access_token)
+    // console.log(this.props.access_token)
   return (
     <ThemeProvider theme={theme}>
       <ChatBot steps={steps} {...config} />

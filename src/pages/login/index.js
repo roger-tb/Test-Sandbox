@@ -78,7 +78,7 @@ class Login extends React.Component {
         //   access_token:response.data.access_token
         // }
         this.props.setToken(response.data.access_token);
-        console.log(this.state)
+        // console.log(this.state)
       })
       .catch((error) => {
        console.log(error);
