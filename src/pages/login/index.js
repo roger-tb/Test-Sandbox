@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { Link, Redirect, useHistory } from "react-router-dom";
 import axios from "axios";
+import {connect} from 'react-redux'
 const StyledSection = styled.section`
   display: flex;
   flex-direction: column;
@@ -10,7 +11,8 @@ const StyledSection = styled.section`
   box-sizing: border-box;
   color: rgb(94, 108, 132);
   margin: 0px auto 24px;
-  padding: 24px 40px;
+  margin-top:1rem;
+  padding: 55px 40px;
   background: rgb(255, 255, 255);
   border-radius: 3px;
 `;
@@ -30,7 +32,8 @@ class Login extends React.Component {
       password: "",
       passwordValid: false,
       formValid: false,
-      errorMsg: {}
+      errorMsg: {},
+      
     };
 
     // this.handleChange = this.handleInputChange.bind(this);
@@ -53,21 +56,33 @@ class Login extends React.Component {
   handleSubmit(event) {
     // alert(this.state.username);
     this.props.history.push("/chatbot");
-    // const history = useHistory();
-    // history.push("/chatbot");
-    // axios.post("https://www.somePlace.com/auth/login", {
-    //   userName,
-    //   password
-    // }).then(result => {
-    //   if (result.status === 200) {
-    //     setAuthTokens(result.data);
-    //     setLoggedIn(true);
-    //   } else {
-    //     setIsError(true);
-    //   }
-    // }).catch(e => {
-    //   setIsError(true);
-    // });
+    const url="https://account.uipath.com/oauth/token"
+    const headers = {
+      'Content-Type': 'application/json',
+      'X-UIPATH-TenantName': 'AnuragDefaup29d298910'
+    }
+    let data = {
+        "grant_type": "refresh_token",
+        "client_id": "8DEv1AMNXczW3y4U15LL3jYf62jK93n5",
+        "refresh_token": "mPWz8CPTZ6FkAv5pJtQHhiWQXGuP0iDE_iRSw2tbAzwvv"
+    }
+    axios.post(url, data, {
+        headers: headers
+      })
+      .then((response) => {
+        console.log(response);
+        // this.setState({
+        //   access_token:response.data.access_token 
+        // }) ;
+        // let tokenObj ={
+        //   access_token:response.data.access_token
+        // }
+        this.props.setToken(response.data.access_token);
+        console.log(this.state)
+      })
+      .catch((error) => {
+       console.log(error);
+      })
     event.preventDefault();
   }
   validatePassword = () => {
@@ -75,21 +90,7 @@ class Login extends React.Component {
     let passwordValid = false;
     let errorMsg = { ...this.state.errorMsg };
 
-    // must be 6 chars
-    // must contain a number
-    // must contain a special character
     if (password.length > 0) passwordValid = true;
-
-    // if (password.length < 6) {
-    //   passwordValid = false;
-    //   errorMsg.password = "Password must be at least 6 characters long";
-    // } else if (!/\d/.test(password)) {
-    //   passwordValid = false;
-    //   errorMsg.password = "Password must contain a digit";
-    // } else if (!/[!@#$%^&*]/.test(password)) {
-    //   passwordValid = false;
-    //   errorMsg.password = "Password must contain special character: !@#$%^&*";
-    // }
 
     this.setState({ passwordValid, errorMsg }, this.validateForm);
   };
@@ -114,8 +115,8 @@ class Login extends React.Component {
       <StyledSection>
         <form onSubmit={this.handleSubmit.bind(this)}>
           <div className="row">
-            <div className="form-group col-12">
-              <label htmlFor="nameImput">User Name</label>
+            <div className="form-group mb-4 col-12">
+              {/* <label htmlFor="nameImput">User Name</label> */}
               {/* <ValidationMessage valid={this.state.usernameValid} message={this.state.errorMsg.username} /> */}
               <input
                 type="text"
@@ -124,11 +125,11 @@ class Login extends React.Component {
                 onChange={e => this.updateUsername(e.target.value)}
                 className="form-control"
                 id="nameImput"
-                placeholder="Name"
+                placeholder="User ID"
               />
             </div>
-            <div className="form-group col-12">
-              <label htmlFor="emailImput">Password</label>
+            <div className="form-group mb-4 col-12">
+              {/* <label htmlFor="emailImput">Password</label> */}
               {/* < ValidationMessage valid={this.state.passwordValid} message={this.state.errorMsg.password} /> */}
               <input
                 name="password"
@@ -137,7 +138,7 @@ class Login extends React.Component {
                 onChange={e => this.updatePassword(e.target.value)}
                 className="form-control"
                 id="emailImput"
-                placeholder="email@domain.com"
+                placeholder="password"
               />
             </div>
           </div>
@@ -151,6 +152,19 @@ class Login extends React.Component {
       </StyledSection>
     );
   }
+  
+}
+function mapStateToProps(state) {
+  return {
+    access_token: state.access_token
+  }
 }
 
-export default Login;
+function mapDispatchToProps(dispatch) {
+  return {
+    setToken:(tokenObj) =>{
+      dispatch({type:"SET_TOKEN",payload:tokenObj})
+    }
+  }
+}
+export default connect(mapStateToProps,mapDispatchToProps)(Login);

@@ -10,12 +10,15 @@ import "./App.css";
 import Login from "./pages/login/index";
 import styled from "styled-components";
 import CustomChatbot from "./pages/chatbot/index";
+import banner from "./assets/terobots_white.png"
 class App extends Component {
   render() {
     return (
       <Router>
         <div className="App">
-          <Styledheader>{/* <img src="assets/terobots.jpg" /> */}</Styledheader>
+          <Styledheader>
+          <StyledLogo></StyledLogo>
+            </Styledheader>
           <Switch>
             <Route path="/login" exact component={Login} />
             <Route path="/chatbot" exact component={CustomChatbot} />
@@ -26,11 +29,22 @@ class App extends Component {
     );
   }
 }
-const Styledheader = styled.nav`
-  height: 62px;
+const Styledheader = styled.div`
+  height: 100px;
   width: 100%;
-  display: flex;
-  align-content: center;
-  /* background: url(assets/terobots.jpg) no-repeat center;  */
+
+  margin: 0 auto;
+  text-align: center;
+  width: 100%;
+ 
+`;
+
+const StyledLogo = styled.div`
+width:100%;
+height:100%;
+background:url(${banner}) no-repeat; 
+background-size: 10rem;
+background-position: center;
+
 `;
 export default App;
