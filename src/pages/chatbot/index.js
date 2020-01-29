@@ -1,53 +1,109 @@
 import React from "react";
 import ChatBot from "react-simple-chatbot";
 import { ThemeProvider } from "styled-components";
-import { connect } from 'react-redux';
+import { connect } from "react-redux";
 import axios from "axios";
+import { botList } from "../../api/constants";
 
 class CustomChatbot extends React.Component {
   constructor(props) {
     super(props);
 
+    console.log(this.props);
+    this.state = {
+      access_token: "",
+      robotList: [],
+      releaseKey: ""
+    };
   }
-
+  componentDidMount() {
+    if (this.props.access_token) this.getBotList(this.props.access_token);
+  }
   componentDidUpdate(prevProps, prevState, snapshot) {
     // console.log(this.props.access_token);
-    this.getBotList();
- 
-}
- 
-getBotList(){
-  const AuthStr = 'Bearer '.concat(this.props.access_token); 
-  const headers = {
-    'Content-Type': 'application/json',
-    'Authorization': AuthStr, 
-    'X-UIPATH-TenantName': 'AnuragDefaup29d298910',
-  
-  };
-  console.log(headers)
-  const URL= 'https://platform.uipath.com/anuraplyzyiv/AnuragDefaup29d298910/odata/Robots';
-  axios.get(URL, { headers: headers })
-   .then(response => {
-       // If request is good...
-       console.log(response);
-    })
-   .catch((error) => {
-       console.log('error ' + error);
-    });
+    // console.log(this.state);
+    // if (prevProps.data !== this.props.data)
+    //   this.setState({
+    //     access_token: this.props.access_token
+    //   });
+    // this.setState( {access_token: this.props.access_token });
+  }
 
-}
+  getBotList(token) {
+    const AuthStr = "Bearer ".concat(token);
+    let options = [];
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: AuthStr,
+      "X-UIPATH-TenantName": "AnuragDefaup29d298910"
+    };
+    console.log(headers);
+    const URL =
+      "https://cors-anywhere.herokuapp.com/https://platform.uipath.com/anuraplyzyiv/AnuragDefaup29d298910/odata/Robots";
+    axios
+      .get(URL, { headers: headers })
+      .then(response => {
+        // If request is good...
+        console.log(response);
+
+        this.setState({
+          robotList: response.data.value
+        });
+      })
+      .catch(error => {
+        console.log("error " + error);
+      });
+    // if (response.data) {
+    //   response.data.value.forEach(bot => {
+    //     options.push({
+    //       value: bot.Id,
+    //       id: bot.Id,
+    //       label: bot.Name,
+    //       trigger: () => {
+    //         return new CustomChatbot().runBot(bot.Id);
+    //       }
+    //     });
+    //   });
+    // }
+    // console.log(options);
+    // return options;
+  }
   render() {
     // console.log(this.props.access_token)
-  return (
-    <ThemeProvider theme={theme}>
-      <ChatBot steps={steps} {...config} />
-    </ThemeProvider>
-  );
+
+    return (
+      <ThemeProvider theme={theme}>
+        <ChatBot steps={botSteps} {...config} />
+      </ThemeProvider>
+    );
+  }
+  runBot(botId) {
+    console.log("Running bot" + botId);
+    return "Done";
+  }
+  prepareBotList() {
+    let options = [];
+    console.log(this.state);
+    if (this.state.robotList) {
+      this.state.robotList.forEach(bot => {
+        options.push({
+          value: bot.Id,
+          id: bot.Id,
+          label: bot.Name,
+          trigger: () => {
+            return new CustomChatbot().runBot(bot.Id);
+          }
+        });
+      });
+    }
+    console.log(options);
+    return options;
   }
 }
+
 const config = {
-  width: "300px",
-  height: "400px",
+  width: "500px",
+  height: "500px",
   floating: true
 };
 const theme = {
@@ -61,6 +117,28 @@ const theme = {
   userBubbleColor: "#fff",
   userFontColor: "#4c4c4c"
 };
+
+const botSteps = [
+  {
+    id: "Greet",
+    message: "Hello, Welcome to Terobots",
+    trigger: "Available Bots"
+  },
+  {
+    id: "Available Bots",
+    message: "Please select the bot you want to run",
+    trigger: "Display list of bots"
+  },
+  {
+    id: "Display list of bots",
+    options: new CustomChatbot().prepareBotList()
+  },
+  {
+    id: "Done",
+    message: "Have a great day !!",
+    end: true
+  }
+];
 const steps = [
   {
     id: "Greet",
@@ -221,8 +299,8 @@ const steps = [
     end: true
   }
 ];
-const mapStateToProps = (state) => ({ 
-  access_token: state.access_token,
+const mapStateToProps = state => ({
+  access_token: state.access_token
   // any props you need else
 });
 export default connect(mapStateToProps)(CustomChatbot);

@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { Link, Redirect, useHistory } from "react-router-dom";
 import axios from "axios";
-import {connect} from 'react-redux'
+import { connect } from "react-redux";
 const StyledSection = styled.section`
   display: flex;
   flex-direction: column;
@@ -11,7 +11,7 @@ const StyledSection = styled.section`
   box-sizing: border-box;
   color: rgb(94, 108, 132);
   margin: 0px auto 24px;
-  margin-top:1rem;
+  margin-top: 1rem;
   padding: 55px 40px;
   background: rgb(255, 255, 255);
   border-radius: 3px;
@@ -32,8 +32,7 @@ class Login extends React.Component {
       password: "",
       passwordValid: false,
       formValid: false,
-      errorMsg: {},
-      
+      errorMsg: {}
     };
 
     // this.handleChange = this.handleInputChange.bind(this);
@@ -55,34 +54,37 @@ class Login extends React.Component {
   };
   handleSubmit(event) {
     // alert(this.state.username);
-    this.props.history.push("/chatbot");
-    const url="https://account.uipath.com/oauth/token"
+
+    const url =
+      "https://cors-anywhere.herokuapp.com/https://account.uipath.com/oauth/token";
     const headers = {
-      'Content-Type': 'application/json',
-      'X-UIPATH-TenantName': 'AnuragDefaup29d298910'
-    }
+      "Content-Type": "application/json",
+      "X-UIPATH-TenantName": "AnuragDefaup29d298910"
+    };
     let data = {
-        "grant_type": "refresh_token",
-        "client_id": "8DEv1AMNXczW3y4U15LL3jYf62jK93n5",
-        "refresh_token": "mPWz8CPTZ6FkAv5pJtQHhiWQXGuP0iDE_iRSw2tbAzwvv"
-    }
-    axios.post(url, data, {
+      grant_type: "refresh_token",
+      client_id: "8DEv1AMNXczW3y4U15LL3jYf62jK93n5",
+      refresh_token: "mPWz8CPTZ6FkAv5pJtQHhiWQXGuP0iDE_iRSw2tbAzwvv"
+    };
+    axios
+      .post(url, data, {
         headers: headers
       })
-      .then((response) => {
+      .then(response => {
         console.log(response);
         // this.setState({
-        //   access_token:response.data.access_token 
+        //   access_token:response.data.access_token
         // }) ;
         // let tokenObj ={
         //   access_token:response.data.access_token
         // }
         this.props.setToken(response.data.access_token);
+        this.props.history.push("/chatbot");
         // console.log(this.state)
       })
-      .catch((error) => {
-       console.log(error);
-      })
+      .catch(error => {
+        console.log(error);
+      });
     event.preventDefault();
   }
   validatePassword = () => {
@@ -152,19 +154,21 @@ class Login extends React.Component {
       </StyledSection>
     );
   }
-  
 }
 function mapStateToProps(state) {
   return {
     access_token: state.access_token
-  }
+  };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    setToken:(tokenObj) =>{
-      dispatch({type:"SET_TOKEN",payload:tokenObj})
+    setToken: tokenObj => {
+      dispatch({ type: "SET_TOKEN", payload: tokenObj });
     }
-  }
+  };
 }
-export default connect(mapStateToProps,mapDispatchToProps)(Login);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Login);
