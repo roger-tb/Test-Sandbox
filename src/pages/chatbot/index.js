@@ -17,6 +17,7 @@ class CustomChatbot extends React.Component {
     };
   }
   componentDidMount() {
+    this.handleClear();
     this.setState({
       access_token: ""
     });
@@ -95,6 +96,12 @@ class CustomChatbot extends React.Component {
         console.log("error " + error);
       });
   }
+
+  handleClear = () => {
+    this.setState({ clear: true }, () => {
+      this.setState({ clear: false });
+    });
+  }
   render() {
     console.log("inside render method");
     // console.log(this.props.access_token)
@@ -105,7 +112,7 @@ class CustomChatbot extends React.Component {
 
     return (
       <ThemeProvider theme={theme}>
-        <ChatBot
+      <ChatBot
           key={this.state.access_token}
           steps={botSteps(this.prepareBotList())}
           {...config}
@@ -113,7 +120,7 @@ class CustomChatbot extends React.Component {
       </ThemeProvider>
     );
   }
-  static runBot(botId) {
+   runBot(botId) {
     console.log(this.state);
     console.log("Running bot" + botId);
     const AuthStr = "Bearer ".concat(this.state.access_token);
@@ -152,7 +159,7 @@ class CustomChatbot extends React.Component {
           id: bot.Id,
           label: bot.Name,
           trigger: () => {
-            return CustomChatbot.runBot(bot.Id);
+            return this.runBot(bot.Id);
           }
         });
       });
@@ -195,8 +202,33 @@ const botSteps = botsteps => [
     options: botsteps
   },
   {
+    id:"Ask for more",
+    message:"Do you wanna run any more bot?",
+    trigger:"display options"
+  },
+  {
+    id:"display options",
+    options: [
+      {
+        value: "Yes",
+        label: "Yes",
+        trigger: "Available Bots"
+      },
+      {
+        value: "No",
+        label: "No",
+        trigger: "Final"
+      }
+    ]
+  },
+  {
     id: "Done",
-    message: "Have a great day !!",
+    message: "Success!",
+    trigger: "Ask for more"
+  },
+  {
+    id: "Final",
+    message: "Have a nice day!",
     end: true
   }
 ];
