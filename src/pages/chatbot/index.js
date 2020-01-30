@@ -8,7 +8,7 @@ import { botList } from "../../api/constants";
 class CustomChatbot extends React.Component {
   constructor(props) {
     super(props);
-
+    console.log("inside constrcutotr");
     console.log(this.props);
     this.state = {
       access_token: "",
@@ -17,7 +17,13 @@ class CustomChatbot extends React.Component {
     };
   }
   componentDidMount() {
-    if (this.props.access_token) this.getBotList(this.props.access_token);
+    this.setState({
+      access_token: ""
+    });
+    if (this.props.access_token) {
+      this.getBotList(this.props.access_token);
+      this.getReleaseKeys(this.props.access_token);
+    }
   }
   componentDidUpdate(prevProps, prevState, snapshot) {
     // console.log(this.props.access_token);
@@ -30,8 +36,18 @@ class CustomChatbot extends React.Component {
   }
 
   getBotList(token) {
+    console.log("inside botlist method" + this.state.access_token);
+    this.setState(
+      {
+        access_token: this.props.access_token
+      },
+      () => {
+        console.log("state updated");
+        console.log(this.props);
+      }
+    );
     const AuthStr = "Bearer ".concat(token);
-    let options = [];
+
     const headers = {
       "Content-Type": "application/json",
       Authorization: AuthStr,
@@ -53,32 +69,77 @@ class CustomChatbot extends React.Component {
       .catch(error => {
         console.log("error " + error);
       });
-    // if (response.data) {
-    //   response.data.value.forEach(bot => {
-    //     options.push({
-    //       value: bot.Id,
-    //       id: bot.Id,
-    //       label: bot.Name,
-    //       trigger: () => {
-    //         return new CustomChatbot().runBot(bot.Id);
-    //       }
-    //     });
-    //   });
-    // }
-    // console.log(options);
-    // return options;
+  }
+
+  getReleaseKeys(token) {
+    const AuthStr = "Bearer ".concat(token);
+
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: AuthStr,
+      "X-UIPATH-TenantName": "AnuragDefaup29d298910"
+    };
+    console.log(headers);
+    const URL =
+      "https://cors-anywhere.herokuapp.com/https://platform.uipath.com/anuraplyzyiv/AnuragDefaup29d298910/odata/Releases";
+    axios
+      .get(URL, { headers: headers })
+      .then(response => {
+        // If request is good...
+        console.log(response);
+        this.setState({
+          releaseKey: response.data.value[0].Key
+        });
+      })
+      .catch(error => {
+        console.log("error " + error);
+      });
   }
   render() {
+    console.log("inside render method");
     // console.log(this.props.access_token)
+    if (this.state.robotList.length <= 0) return null;
+
+    console.log(this.state);
+    console.log(botSteps);
 
     return (
       <ThemeProvider theme={theme}>
-        <ChatBot steps={botSteps} {...config} />
+        <ChatBot
+          key={this.state.access_token}
+          steps={botSteps(this.prepareBotList())}
+          {...config}
+        />
       </ThemeProvider>
     );
   }
-  runBot(botId) {
+  static runBot(botId) {
+    console.log(this.state);
     console.log("Running bot" + botId);
+    const AuthStr = "Bearer ".concat(this.state.access_token);
+    const url =
+      "https://cors-anywhere.herokuapp.com/https://platform.uipath.com/anuraplyzyiv/AnuragDefaup29d298910/odata/Jobs/UiPath.Server.Configuration.OData.StartJobs";
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: AuthStr,
+      "X-UIPATH-TenantName": "AnuragDefaup29d298910",
+      "X-UIPATH-FolderPath": "default"
+    };
+    let data = {
+      startInfo: {
+        ReleaseKey: this.state.releaseKey,
+        RobotIds: [botId],
+        Strategy: "Specific"
+      }
+    };
+    console.log(data);
+    axios
+      .post(url, data, {
+        headers: headers
+      })
+      .then(response => {
+        console.log(response);
+      });
     return "Done";
   }
   prepareBotList() {
@@ -91,7 +152,7 @@ class CustomChatbot extends React.Component {
           id: bot.Id,
           label: bot.Name,
           trigger: () => {
-            return new CustomChatbot().runBot(bot.Id);
+            return CustomChatbot.runBot(bot.Id);
           }
         });
       });
@@ -118,7 +179,7 @@ const theme = {
   userFontColor: "#4c4c4c"
 };
 
-const botSteps = [
+const botSteps = botsteps => [
   {
     id: "Greet",
     message: "Hello, Welcome to Terobots",
@@ -131,7 +192,7 @@ const botSteps = [
   },
   {
     id: "Display list of bots",
-    options: new CustomChatbot().prepareBotList()
+    options: botsteps
   },
   {
     id: "Done",
