@@ -16,9 +16,9 @@ class App extends Component {
     return (
       <Router>
         <div className="App">
-          <Styledheader>
+          {/* <Styledheader>
           <StyledLogo></StyledLogo>
-            </Styledheader>
+            </Styledheader> */}
           <Switch>
             <Route path="/login" exact component={Login} />
             <Route path="/chatbot" exact component={CustomChatbot} />

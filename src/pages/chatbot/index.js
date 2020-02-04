@@ -4,6 +4,8 @@ import { ThemeProvider } from "styled-components";
 import { connect } from "react-redux";
 import axios from "axios";
 import { botList } from "../../api/constants";
+import {DownloadTemplate} from "../../components/download-template";
+import {UploadTemplate} from "../../components/upload-template";
 
 class CustomChatbot extends React.Component {
   constructor(props) {
@@ -21,19 +23,13 @@ class CustomChatbot extends React.Component {
     this.setState({
       access_token: ""
     });
-    if (this.props.access_token) {
-      this.getBotList(this.props.access_token);
-      this.getReleaseKeys(this.props.access_token);
-    }
+    // if (this.props.access_token) {
+    //   this.getBotList(this.props.access_token);
+    //   this.getReleaseKeys(this.props.access_token);
+    // }
   }
   componentDidUpdate(prevProps, prevState, snapshot) {
-    // console.log(this.props.access_token);
-    // console.log(this.state);
-    // if (prevProps.data !== this.props.data)
-    //   this.setState({
-    //     access_token: this.props.access_token
-    //   });
-    // this.setState( {access_token: this.props.access_token });
+  
   }
 
   getBotList(token) {
@@ -103,12 +99,9 @@ class CustomChatbot extends React.Component {
     });
   }
   render() {
-    console.log("inside render method");
-    // console.log(this.props.access_token)
-    if (this.state.robotList.length <= 0) return null;
-
-    console.log(this.state);
-    console.log(botSteps);
+    // console.log("inside render method");
+    // // console.log(this.props.access_token)
+    // if (this.state.robotList.length <= 0) return null;
 
     return (
       <ThemeProvider theme={theme}>
@@ -170,9 +163,11 @@ class CustomChatbot extends React.Component {
 }
 
 const config = {
-  width: "500px",
-  height: "500px",
-  floating: true
+  width: "100%",
+  height: "100vh",
+  floating: false,
+  opened:true,
+  headerTitle:"Terobot Agent"
 };
 const theme = {
   background: "white",
@@ -190,16 +185,78 @@ const botSteps = botsteps => [
   {
     id: "Greet",
     message: "Hello, Welcome to Terobots",
-    trigger: "Available Bots"
+    trigger: "options"
   },
   {
-    id: "Available Bots",
-    message: "Please select the bot you want to run",
-    trigger: "Display list of bots"
+    id: "options",
+    message: "What would you like to do today?",
+    trigger: "Display list of available options"
   },
   {
-    id: "Display list of bots",
-    options: botsteps
+    id: "Display list of available options",
+    options: [
+      {
+        value: "Approve PO",
+        label: "Approve PO",
+        trigger: "Ask number"
+      },
+      {
+        value: "View PO",
+        label: "View PO",
+        trigger: "Ask for more"
+      },
+      
+      {
+        value: "Create PO",
+        label: "Create PO",
+        trigger: "Ask for more"
+      }
+    ]
+  },
+  {
+    id:"Ask number",
+    options:[
+      {
+        value: "Single",
+        label: "Single",
+        trigger: "Ask PO Number"
+      },
+      {
+        value: "Multiple",
+        label: "Multiple",
+        trigger: "download template"
+      }
+    ]
+  },
+  {
+    id:"download template",
+    component: <DownloadTemplate/>,
+    trigger: "download PO template"
+  },
+  {
+    id:"download PO template",
+    message:"Please use the above template to upload PO details",
+    trigger:"Upload template"
+  },
+  {
+    id:"Upload template",
+    component:<UploadTemplate/>,
+    end:true
+  },
+  {
+    id:'Ask PO Number',
+    message: "Please type your PO number",
+    trigger: "Waiting user input for PO"
+  },
+  {
+    id: "Waiting user input for PO",
+    user: true,
+    trigger: "trigger Bot"
+  },
+  {
+    id:"trigger Bot",
+    message: "Success!",
+    trigger: "Ask for more"
   },
   {
     id:"Ask for more",
@@ -212,7 +269,7 @@ const botSteps = botsteps => [
       {
         value: "Yes",
         label: "Yes",
-        trigger: "Available Bots"
+        trigger: "Ask for more"
       },
       {
         value: "No",
