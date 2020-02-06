@@ -4,8 +4,8 @@ import { ThemeProvider } from "styled-components";
 import { connect } from "react-redux";
 import axios from "axios";
 import { botList } from "../../api/constants";
-import {DownloadTemplate} from "../../components/download-template";
-import {UploadTemplate} from "../../components/upload-template";
+import { DownloadTemplate } from "../../components/download-template";
+import { UploadTemplate } from "../../components/upload-template";
 
 class CustomChatbot extends React.Component {
   constructor(props) {
@@ -28,9 +28,7 @@ class CustomChatbot extends React.Component {
     //   this.getReleaseKeys(this.props.access_token);
     // }
   }
-  componentDidUpdate(prevProps, prevState, snapshot) {
-  
-  }
+  componentDidUpdate(prevProps, prevState, snapshot) {}
 
   getBotList(token) {
     console.log("inside botlist method" + this.state.access_token);
@@ -97,7 +95,7 @@ class CustomChatbot extends React.Component {
     this.setState({ clear: true }, () => {
       this.setState({ clear: false });
     });
-  }
+  };
   render() {
     // console.log("inside render method");
     // // console.log(this.props.access_token)
@@ -105,7 +103,7 @@ class CustomChatbot extends React.Component {
 
     return (
       <ThemeProvider theme={theme}>
-      <ChatBot
+        <ChatBot
           key={this.state.access_token}
           steps={botSteps(this.prepareBotList())}
           {...config}
@@ -113,7 +111,7 @@ class CustomChatbot extends React.Component {
       </ThemeProvider>
     );
   }
-   runBot(botId) {
+  runBot(botId) {
     console.log(this.state);
     console.log("Running bot" + botId);
     const AuthStr = "Bearer ".concat(this.state.access_token);
@@ -166,8 +164,14 @@ const config = {
   width: "100%",
   height: "100vh",
   floating: false,
-  opened:true,
-  headerTitle:"Terobot Agent"
+  opened: true,
+  headerTitle: "Terobot Agent",
+  customStyle: {
+    padding: "10px",
+    background: "#00B2B2",
+    color: "#fff",
+    cursor: "pointer"
+  }
 };
 const theme = {
   background: "white",
@@ -205,7 +209,7 @@ const botSteps = botsteps => [
         label: "View PO",
         trigger: "Ask for more"
       },
-      
+
       {
         value: "Create PO",
         label: "Create PO",
@@ -214,8 +218,8 @@ const botSteps = botsteps => [
     ]
   },
   {
-    id:"Ask number",
-    options:[
+    id: "Ask number",
+    options: [
       {
         value: "Single",
         label: "Single",
@@ -229,22 +233,22 @@ const botSteps = botsteps => [
     ]
   },
   {
-    id:"download template",
-    component: <DownloadTemplate/>,
+    id: "download template",
+    component: <DownloadTemplate />,
     trigger: "download PO template"
   },
   {
-    id:"download PO template",
-    message:"Please use the above template to upload PO details",
-    trigger:"Upload template"
+    id: "download PO template",
+    message: "Please use the above template to upload PO details",
+    trigger: "Upload template"
   },
   {
-    id:"Upload template",
-    component:<UploadTemplate/>,
-    end:true
+    id: "Upload template",
+    component: <UploadTemplate />,
+    end: true
   },
   {
-    id:'Ask PO Number',
+    id: "Ask PO Number",
     message: "Please type your PO number",
     trigger: "Waiting user input for PO"
   },
@@ -254,17 +258,17 @@ const botSteps = botsteps => [
     trigger: "trigger Bot"
   },
   {
-    id:"trigger Bot",
+    id: "trigger Bot",
     message: "Success!",
     trigger: "Ask for more"
   },
   {
-    id:"Ask for more",
-    message:"Do you wanna run any more bot?",
-    trigger:"display options"
+    id: "Ask for more",
+    message: "Do you wanna run any more bot?",
+    trigger: "display options"
   },
   {
-    id:"display options",
+    id: "display options",
     options: [
       {
         value: "Yes",
