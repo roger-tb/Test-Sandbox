@@ -23,12 +23,24 @@ class CustomChatbot extends React.Component {
     this.setState({
       access_token: ""
     });
+    this.callBackendAPI()
+    .then(res => this.setState({ data: res.express }))
+    .catch(err => console.log(err));
+    
     // if (this.props.access_token) {
     //   this.getBotList(this.props.access_token);
     //   this.getReleaseKeys(this.props.access_token);
     // }
   }
-  componentDidUpdate(prevProps, prevState, snapshot) {}
+  callBackendAPI = async () => {
+    const response = await fetch('/express_backend');
+    const body = await response.json();
+
+    if (response.status !== 200) {
+      throw Error(body.message) 
+    }
+    return body;
+  };
 
   getBotList(token) {
     console.log("inside botlist method" + this.state.access_token);
