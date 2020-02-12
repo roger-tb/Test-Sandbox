@@ -8,9 +8,9 @@ const s3 = new aws.S3();
 const port = process.env.PORT || 5000;
 
 aws.config.update({
-  secretAccessKey: "nsNG6kZbvTvyYLWj9T+K1bpKSgGiuPAsJUkkeM7m",
-  accessKeyId: "AKIAXJC3QLRSIANNVBNP",
-  region: "ap-south-1"
+  secretAccessKey: "xxxxxxxxx",
+  accessKeyId: "xxxx",
+  region: "xxx"
 });
 // app.use(bodyParser.json());
 // console.log that your server is up and running
