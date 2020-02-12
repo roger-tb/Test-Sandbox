@@ -246,18 +246,28 @@ const botSteps = botsteps => [
   },
   {
     id: "download template",
-    component: <DownloadTemplate />,
+    component: <DownloadTemplate processing="false" downloadText="Download Template"/>,
     trigger: "download PO template"
   },
   {
     id: "download PO template",
     message: "Please use the above template to upload PO details",
-    trigger: "Upload template"
+    trigger: "Upload template",
+    metadata: {
+      triggerNext: 'Download complete template',
+    }
   },
   {
     id: "Upload template",
     component: <UploadTemplate />,
-    end: true
+    waitAction: true,
+    
+    // need to trigger from upload
+  },
+  {
+    id: "Download complete template",
+    component: <DownloadTemplate downloadText="Download Comleted file to verify."/>,
+    trigger: "Ask for more"
   },
   {
     id: "Ask PO Number",

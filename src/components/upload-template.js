@@ -2,6 +2,7 @@ import React from "react";
 import { MdCloudUpload } from "react-icons/md";
 export class UploadTemplate extends React.Component {
   constructor(props) {
+      console.log(props)
     super(props);
     this.state = { message: "", files: [] };
   }
@@ -16,7 +17,13 @@ export class UploadTemplate extends React.Component {
   };
 
   handleSendFiles = () => {
+    const { previousStep } = this.props;
+    const { metadata = {} } = previousStep;
+    const trigger =  metadata.triggerNext;
     console.log(this.state.files[0]);
+    console.log(this.props)
+    console.log("inside handle send files method");
+    this.props.triggerNextStep({ value: metadata.triggerNext, trigger });
 
     // this.state.files
   };
@@ -29,7 +36,7 @@ export class UploadTemplate extends React.Component {
   render() {
     return (
       <div className="FileUploadForm" style={{ width: "100%" }}>
-        <form method="post" encType="multipart/form-data" action="/upload">
+        {/* <form encType="multipart/form-data"> */}
           <InputFile
             onChange={this.handleInputChange}
             message={this.state.message}
@@ -40,7 +47,7 @@ export class UploadTemplate extends React.Component {
             onSendClick={this.handleSendFiles}
             onReset={this.resetFile}
           />
-        </form>
+        {/* </form> */}
       </div>
     );
   }

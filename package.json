@@ -39,7 +39,6 @@
     "client": "npm start",
     "dev": "concurrently \"npm run client\" \"npm run server\""
   },
-  "proxy": "http://127.0.0.1:5000/",
   "browserslist": [
     ">0.2%",
     "not dead",
