@@ -23,7 +23,10 @@ export class UploadTemplate extends React.Component {
     console.log(this.state.files[0]);
     console.log(this.props)
     console.log("inside handle send files method");
-    this.props.triggerNextStep({ value: metadata.triggerNext, trigger });
+    
+        this.props.triggerNextStep({ value: metadata.triggerNext, trigger });
+    // },3000)
+    
 
     // this.state.files
   };

@@ -177,7 +177,7 @@ const config = {
   height: "100vh",
   floating: false,
   opened: true,
-  headerTitle: "Terobot Agent",
+  headerTitle: "Tero-PO Approval Bot",
   customStyle: {
     padding: "10px",
     background: "#00B2B2",
@@ -261,13 +261,17 @@ const botSteps = botsteps => [
     id: "Upload template",
     component: <UploadTemplate />,
     waitAction: true,
+    metadata: {
+      triggerNext: 'Ask for more',
+    }
     
     // need to trigger from upload
   },
   {
     id: "Download complete template",
-    component: <DownloadTemplate downloadText="Download Comleted file to verify."/>,
-    trigger: "Ask for more"
+    component: <DownloadTemplate downloadText="Please download updated file to verify." processing="true"/>,
+    // trigger: "Ask for more",
+    
   },
   {
     id: "Ask PO Number",
@@ -281,7 +285,7 @@ const botSteps = botsteps => [
   },
   {
     id: "trigger Bot",
-    message: "Success!",
+    message: "PO Approved Successfully!",
     trigger: "Ask for more"
   },
   {
@@ -295,7 +299,7 @@ const botSteps = botsteps => [
       {
         value: "Yes",
         label: "Yes",
-        trigger: "Ask for more"
+        trigger: "Display list of available options"
       },
       {
         value: "No",
@@ -307,7 +311,7 @@ const botSteps = botsteps => [
   {
     id: "Done",
     message: "Success!",
-    trigger: "Ask for more"
+    trigger: "Display list of available options"
   },
   {
     id: "Final",
