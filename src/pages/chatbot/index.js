@@ -180,7 +180,7 @@ const config = {
   headerTitle: "Tero-PO Approval Bot",
   customStyle: {
     padding: "10px",
-    background: "#00B2B2",
+    background: "#777",
     color: "#fff",
     cursor: "pointer"
   }
@@ -188,10 +188,10 @@ const config = {
 const theme = {
   background: "white",
   fontFamily: "Arial, Helvetica, sans-serif",
-  headerBgColor: "#00B2B2",
+  headerBgColor: "#777",
   headerFontColor: "#fff",
   headerFontSize: "25px",
-  botBubbleColor: "#00B2B2",
+  botBubbleColor: "#777",
   botFontColor: "#fff",
   userBubbleColor: "#fff",
   userFontColor: "#4c4c4c"
@@ -205,16 +205,21 @@ const botSteps = botsteps => [
   },
   {
     id: "options",
-    message: "What would you like to do today?",
+    message: "Please select the task you want to perform.",
     trigger: "Display list of available options"
   },
   {
     id: "Display list of available options",
     options: [
       {
+        value: "Create PO",
+        label: "Create PO",
+        trigger: "Ask number"
+      },
+      {
         value: "Approve PO",
         label: "Approve PO",
-        trigger: "Ask number"
+        trigger: "Ask for more"
       },
       {
         value: "View PO",
@@ -222,11 +227,7 @@ const botSteps = botsteps => [
         trigger: "Ask for more"
       },
 
-      {
-        value: "Create PO",
-        label: "Create PO",
-        trigger: "Ask for more"
-      }
+      
     ]
   },
   {
@@ -269,19 +270,32 @@ const botSteps = botsteps => [
   },
   {
     id: "Download complete template",
-    component: <DownloadTemplate downloadText="Please download updated file to verify." processing="true"/>,
+    component: <DownloadTemplate downloadText="PO number '8000006' created successfully." processing="true"/>,
     // trigger: "Ask for more",
     
   },
   {
     id: "Ask PO Number",
-    message: "Please type your PO number",
-    trigger: "Waiting user input for PO"
+    message: "Please enter the unit details",
+    trigger: "Waiting user input for Unit details"
   },
   {
-    id: "Waiting user input for PO",
+    id: "Waiting user input for Unit details",
     user: true,
-    trigger: "trigger Bot"
+    trigger: "Waiting user input for Quanitity",
+    metadata: {
+      triggerNext: 'Download complete template',
+    }
+  },
+  {
+    id: "Waiting user input for Quanitity",
+    message: "Please enter the Quantity",
+    trigger: "WFQ"
+  },
+  {
+    id: "WFQ",
+    user: true,
+    trigger: "Download complete template"
   },
   {
     id: "trigger Bot",

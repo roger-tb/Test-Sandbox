@@ -22,7 +22,7 @@ export class DownloadTemplate extends React.Component {
             this.props.triggerNextStep({ value: metadata.triggerNext, trigger })
                 
            
-        }.bind(this), 3000)
+        }.bind(this), 40000)
     }
     // setTimeout(()=>{
     //     this.props.triggerNextStep({ value: metadata.triggerNext, trigger })
