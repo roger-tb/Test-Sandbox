@@ -6,6 +6,7 @@ import axios from "axios";
 import { botList } from "../../api/constants";
 import { DownloadTemplate } from "../../components/download-template";
 import { UploadTemplate } from "../../components/upload-template";
+import botIcon from "../../assets/bot-icon-1.jpeg";
 
 class CustomChatbot extends React.Component {
   constructor(props) {
@@ -118,6 +119,7 @@ class CustomChatbot extends React.Component {
         <ChatBot
           key={this.state.access_token}
           steps={botSteps(this.prepareBotList())}
+          botAvatar={botIcon}
           {...config}
         />
       </ThemeProvider>
@@ -174,27 +176,42 @@ class CustomChatbot extends React.Component {
 
 const config = {
   width: "100%",
-  height: "100vh",
+  height: "95vh",
   floating: false,
   opened: true,
-  headerTitle: "Tero-PO Approval Bot",
+  headerTitle: "Tero",
+  avatarStyle:{
+    height:"52px",
+    "box-shadow":"none"
+  },
   customStyle: {
     padding: "10px",
     background: "#777",
     color: "#fff",
-    cursor: "pointer"
+    cursor: "pointer",
+   
+  },
+  bubbleOptionStyle:{
+    border:"1px solid #7082e0",
+    fontSize:"16px"
+   
+  },
+  bubbleStyle:{
+    border:"1px solid #7082e0",
+    fontSize:"16px"
   }
 };
 const theme = {
   background: "white",
   fontFamily: "Arial, Helvetica, sans-serif",
-  headerBgColor: "#777",
+  headerBgColor: "#7082e0",
   headerFontColor: "#fff",
   headerFontSize: "25px",
-  botBubbleColor: "#777",
-  botFontColor: "#fff",
-  userBubbleColor: "#fff",
-  userFontColor: "#4c4c4c"
+  botBubbleColor: "#fff",
+  // botBorder:"1px solid #777",
+  botFontColor: "#000",
+  userBubbleColor: "#8378e8",
+  userFontColor: "#fff"
 };
 
 const botSteps = botsteps => [
@@ -248,7 +265,9 @@ const botSteps = botsteps => [
   {
     id: "download template",
     component: <DownloadTemplate processing="false" downloadText="Download Template"/>,
-    trigger: "download PO template"
+    trigger: "download PO template",
+    asMessage: true
+   
   },
   {
     id: "download PO template",
@@ -256,7 +275,8 @@ const botSteps = botsteps => [
     trigger: "Upload template",
     metadata: {
       triggerNext: 'Download complete template',
-    }
+    },
+    asMessage: true
   },
   {
     id: "Upload template",
@@ -264,7 +284,8 @@ const botSteps = botsteps => [
     waitAction: true,
     metadata: {
       triggerNext: 'Ask for more',
-    }
+    },
+    asMessage: true
     
     // need to trigger from upload
   },
@@ -272,6 +293,7 @@ const botSteps = botsteps => [
     id: "Download complete template",
     component: <DownloadTemplate downloadText="PO number '8000006' created successfully." processing="true"/>,
     // trigger: "Ask for more",
+    asMessage: true
     
   },
   {

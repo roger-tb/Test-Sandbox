@@ -1,6 +1,8 @@
 import React from "react";
 import { MdCloudDownload } from "react-icons/md";
 import ReactLoading from 'react-loading';
+import styled from "styled-components";
+// import botIcon from "../assets/bot-icon.png";
 
 export class DownloadTemplate extends React.Component { 
     constructor(props) {
@@ -22,7 +24,7 @@ export class DownloadTemplate extends React.Component {
             this.props.triggerNextStep({ value: metadata.triggerNext, trigger })
                 
            
-        }.bind(this), 40000)
+        }.bind(this), 4000)
     }
     // setTimeout(()=>{
     //     this.props.triggerNextStep({ value: metadata.triggerNext, trigger })
@@ -32,18 +34,34 @@ export class DownloadTemplate extends React.Component {
     
 
     render() {
-        
+      const downloadComponent = {
+            cursor:"pointer"
+      };
   return (
     <div style={{ width: "100%" }}>
         {this.state.processing == "true"? (
-          <ReactLoading type={"bars"} color={"white"} />
+          <ReactLoading type={"bars"} color={"black"} height={"30px"} width={"35px"}/>
         ) : (
-            <a>
+          <StyledDownload>
+          
+            <div style={downloadComponent}>
             {this.props.downloadText}  <MdCloudDownload/>
-          </a>
+          </div>
+            </StyledDownload>
+            
         )}
       
     </div>
   );
         }
 }
+
+const StyledDownload = styled.div`
+cursor:pointer;
+`;
+// const StyledLogo = styled.div`
+// width:100%;
+// height:auto;
+// background:url(${botIcon}) no-repeat; 
+// background-size: 4rem;
+// background-position: center;`;

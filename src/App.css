@@ -1,8 +1,10 @@
 .App {
   /* text-align: center; */
-  background: url("./assets/slide_bg.jpg") no-repeat center center fixed;
-  min-height: 100vh;
-  background-color: whitesmoke;
+  /* background: url("./assets/slide_bg.jpg") no-repeat center center fixed; */
+  /* min-height: 30vh; */
+  /* height: 50vh; */
+  background-color: #fff;
+  padding: 3%;
 }
 
 body,
