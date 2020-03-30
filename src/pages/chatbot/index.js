@@ -230,17 +230,17 @@ const botSteps = botsteps => [
     options: [
       {
         value: "Create PO",
-        label: "Create PO",
+        label: "Sales Inquiry",
         trigger: "Ask number"
       },
       {
         value: "Approve PO",
-        label: "Approve PO",
+        label: "Sales Quotation",
         trigger: "Ask for more"
       },
       {
         value: "View PO",
-        label: "View PO",
+        label: "Work Order",
         trigger: "Ask for more"
       },
 
@@ -271,7 +271,7 @@ const botSteps = botsteps => [
   },
   {
     id: "download PO template",
-    message: "Please use the above template to upload PO details",
+    message: "Please use the above template to upload Sales Inquiry details",
     trigger: "Upload template",
     metadata: {
       triggerNext: 'Download complete template',
@@ -291,7 +291,7 @@ const botSteps = botsteps => [
   },
   {
     id: "Download complete template",
-    component: <DownloadTemplate downloadText="PO number '8000006' created successfully." processing="true"/>,
+    component: <DownloadTemplate downloadText="SALINQ-1929-03-001 generated successfully." processing="true"/>,
     // trigger: "Ask for more",
     asMessage: true
     
