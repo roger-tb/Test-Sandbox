@@ -1,5 +1,7 @@
 import React from "react";
 import { MdCloudUpload } from "react-icons/md";
+import axios, { post } from 'axios';
+
 export class UploadTemplate extends React.Component {
   constructor(props) {
       console.log(props)
@@ -23,13 +25,26 @@ export class UploadTemplate extends React.Component {
     console.log(this.state.files[0]);
     console.log(this.props)
     console.log("inside handle send files method");
-    
-        this.props.triggerNextStep({ value: metadata.triggerNext, trigger });
-    // },3000)
-    
+    this.fileUpload(this.state.files[0]).then((response)=>{
+      console.log(response.data);
+      this.props.triggerNextStep({ value: metadata.triggerNext, trigger });
+    })
+   
+  }
 
-    // this.state.files
-  };
+  fileUpload(file){
+    const url = 'https://cors-anywhere.herokuapp.com/https://terobotsapi.azurewebsites.net/api/filehandler/uploadfile/terobotsinbound';
+    const formData = new FormData();
+    formData.append('file',file)
+    const config = {
+        headers: {
+            'content-type': 'multipart/form-data'
+        }
+    }
+    return  post(url, formData,config)
+  }
+
+
   resetFile = () => {
     this.setState({
       message: "",
