@@ -36,7 +36,7 @@ export class DownloadTemplate extends React.Component {
   downloadFile(){
     console.log("download here");
     axios({
-      url: 'https://cors-anywhere.herokuapp.com/https://terobotsapi.azurewebsites.net/api/filehandler/downloadfile/SalesEnquiry.xlsx/terobotstemplate', //your url
+      url: 'https://cors-anywhere.herokuapp.com/https://terobotsapi.azurewebsites.net/api/filehandler/downloadfile/SalesInquiryTemplate.xlsx/terobotstemplate', //your url
       method: 'GET',
       responseType: 'blob', // important
     }).then((response) => {
